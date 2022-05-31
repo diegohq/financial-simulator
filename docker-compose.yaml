@@ -1,0 +1,23 @@
+version: "3.8"
+services:
+  php:
+    build:
+      context: ./
+      dockerfile: docker/dev/php.Dockerfile
+    volumes:
+      - ./:/var/www/html
+  phpunit:
+    build:
+      context: ./
+      dockerfile: docker/dev/php.Dockerfile
+    entrypoint: [ "vendor/bin/phpunit" ]
+    volumes:
+      - ./:/var/www/html
+  composer:
+    build:
+      context: ./
+      dockerfile: docker/dev/php.Dockerfile
+    entrypoint: ["composer"]
+    volumes:
+      - ./:/var/www/html
+      - ./docker/dev/volumes/composer:/tmp
