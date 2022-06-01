@@ -12,14 +12,13 @@ services:
   php-fpm:
     build:
       context: ./
-      dockerfile: docker/dev/php.Dockerfile
+      dockerfile: docker/dev/php-fpm.Dockerfile
     volumes:
       - ./:/var/www/html
   php:
     build:
       context: ./
       dockerfile: docker/dev/php.Dockerfile
-    entrypoint: [ "php" ]
     volumes:
       - ./:/var/www/html
   phpunit:
