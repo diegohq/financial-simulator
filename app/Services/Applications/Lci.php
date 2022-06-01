@@ -17,7 +17,6 @@ class Lci extends Application
      * Constructor
      *
      * @param CompoundInterest $compoundInterest
-     * @param Ir $ir
      * @param Iof $iof
      */
     public function __construct(
