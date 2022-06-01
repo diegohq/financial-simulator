@@ -2,10 +2,9 @@
 
 namespace Tests\Unit\Services\Applications;
 
-use App\Services\Applications\Lci;
+use App\Services\Applications\Application;
 use App\Services\Applications\Raw;
 use App\Services\CompoundInterest;
-use App\Services\Discounts\Iof;
 use Tests\TestCase;
 
 class RawTest extends TestCase
@@ -19,8 +18,8 @@ class RawTest extends TestCase
 
         $service = new Raw($compoundInterest);
 
-        $this->assertEquals(
-            1100,
+        $this->assertInstanceOf(
+            Application::class,
             $service->calculate(1000, 360, 0.1)
         );
 

@@ -13,13 +13,13 @@ abstract class Application
      * @param float $initialAmount
      * @param float $annualInterest
      * @param int $days
-     * @return float
+     * @return $this
      */
     abstract public function calculate(
         float $initialAmount,
         int $days,
         float $annualInterest,
-    ): float;
+    ): Application;
 
     /**
      * Return final amount

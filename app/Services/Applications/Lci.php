@@ -31,7 +31,7 @@ class Lci extends Application
         float $initialAmount,
         int $days,
         float $annualInterest,
-    ): float {
+    ): Application {
 
         $this->grossAmount = $this->compoundInterest->calculate(
             $initialAmount,
@@ -41,7 +41,7 @@ class Lci extends Application
 
         $this->calculateDiscount($initialAmount, $days);
 
-        return $this->finalAmount();
+        return $this;
     }
 
     /**

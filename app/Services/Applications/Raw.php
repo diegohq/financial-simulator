@@ -23,13 +23,13 @@ class Raw extends Application
         float $initialAmount,
         int $days,
         float $annualInterest
-    ): float {
+    ): Application {
         $this->grossAmount = $this->compoundInterest->calculate(
             $initialAmount,
             $days,
             $annualInterest
         );
 
-        return $this->grossAmount;
+        return $this;
     }
 }

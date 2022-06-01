@@ -2,6 +2,7 @@
 
 namespace Tests\Unit\Services\Applications;
 
+use App\Services\Applications\Application;
 use App\Services\Applications\Lca;
 use App\Services\CompoundInterest;
 use App\Services\Discounts\Iof;
@@ -23,8 +24,8 @@ class LcaTest extends TestCase
 
         $service = new Lca($compoundInterest, $iof);
 
-        $this->assertEquals(
-            1100,
+        $this->assertInstanceOf(
+            Application::class,
             $service->calculate(1000, 360, 0.1)
         );
 
@@ -47,8 +48,8 @@ class LcaTest extends TestCase
 
         $service = new Lca($compoundInterest, $iof);
 
-        $this->assertEquals(
-            1067,
+        $this->assertInstanceOf(
+            Application::class,
             $service->calculate(1000, 20, 0.1)
         );
 

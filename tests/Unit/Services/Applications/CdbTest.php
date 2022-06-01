@@ -2,6 +2,7 @@
 
 namespace Tests\Unit\Services\Applications;
 
+use App\Services\Applications\Application;
 use App\Services\Applications\Cdb;
 use App\Services\CompoundInterest;
 use App\Services\Discounts\Iof;
@@ -29,8 +30,8 @@ class CdbTest extends TestCase
 
         $service = new Cdb($compoundInterest, $ir, $iof);
 
-        $this->assertEquals(
-            1080,
+        $this->assertInstanceOf(
+            Application::class,
             $service->calculate(1000, 360, 0.1)
         );
 
@@ -58,8 +59,8 @@ class CdbTest extends TestCase
 
         $service = new Cdb($compoundInterest, $ir, $iof);
 
-        $this->assertEquals(
-            1044.5,
+        $this->assertInstanceOf(
+            Application::class,
             $service->calculate(1000, 20, 0.1)
         );
 
