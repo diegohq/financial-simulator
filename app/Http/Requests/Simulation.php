@@ -26,7 +26,7 @@ class Simulation extends FormRequest
         return [
             'initial_amount' => 'required|numeric',
             'days' => 'required|integer',
-            'annual_interest' => 'required|numeric',
+            'annual_interest' => 'numeric',
         ];
     }
 }

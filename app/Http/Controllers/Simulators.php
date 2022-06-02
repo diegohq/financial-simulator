@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Simulation;
 use App\Http\Transformer\Simulation as Transformer;
+use App\Services\Applications\AnnualInterest;
 use App\Services\Applications\Cdb;
 use App\Services\Applications\Lc;
 use App\Services\Applications\Lca;
@@ -12,7 +13,10 @@ use App\Services\Applications\Raw;
 
 class Simulators extends Controller
 {
-    public function __construct(private Transformer $transformer) {}
+    public function __construct(
+        private Transformer $transformer,
+        private AnnualInterest $annualInterest
+    ) {}
 
     /**
      * Calculate Raw application
@@ -27,7 +31,9 @@ class Simulators extends Controller
             $application->calculate(
                 $request->input('initial_amount'),
                 $request->input('days'),
-                $request->input('annual_interest'),
+                $this->annualInterest->interest(
+                    $request->input('annual_interest')
+                ),
             )
         );
     }
@@ -45,7 +51,9 @@ class Simulators extends Controller
             $application->calculate(
                 $request->input('initial_amount'),
                 $request->input('days'),
-                $request->input('annual_interest'),
+                $this->annualInterest->interest(
+                    $request->input('annual_interest')
+                ),
             )
         );
     }
@@ -63,7 +71,9 @@ class Simulators extends Controller
             $application->calculate(
                 $request->input('initial_amount'),
                 $request->input('days'),
-                $request->input('annual_interest'),
+                $this->annualInterest->interest(
+                    $request->input('annual_interest')
+                ),
             )
         );
     }
@@ -81,7 +91,9 @@ class Simulators extends Controller
             $application->calculate(
                 $request->input('initial_amount'),
                 $request->input('days'),
-                $request->input('annual_interest'),
+                $this->annualInterest->interest(
+                    $request->input('annual_interest')
+                ),
             )
         );
     }
@@ -99,7 +111,9 @@ class Simulators extends Controller
             $application->calculate(
                 $request->input('initial_amount'),
                 $request->input('days'),
-                $request->input('annual_interest'),
+                $this->annualInterest->interest(
+                    $request->input('annual_interest')
+                ),
             )
         );
     }
