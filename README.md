@@ -10,6 +10,12 @@ To run the project, you can use Docker:
 docker-compose up server
 ```
 
+### Artisan
+
+```bash
+docker-compose run --rm php artisan [COMMAND]
+```
+
 ### Tests
 
 ```bash
