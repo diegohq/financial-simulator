@@ -8,7 +8,7 @@ class SimulatorsTest extends TestCase
 {
     public function testRawSuccessfullyRequest()
     {
-        $request = $this->postJson(
+        $response = $this->postJson(
             '/api/simulators/raw', [
                 'initial_amount' => 1000,
                 'days' => 720,
@@ -16,9 +16,9 @@ class SimulatorsTest extends TestCase
             ]
         );
 
-        $request->assertStatus(200);
+        $response->assertStatus(200);
 
-        $request->assertJson([
+        $response->assertJson([
             'gross_amount' => 1210,
             'discounts' => 0,
             'final_amount' => 1210,
@@ -27,7 +27,7 @@ class SimulatorsTest extends TestCase
 
     public function testRawUnprocessableEntityRequest()
     {
-        $request = $this->postJson(
+        $response = $this->postJson(
             '/api/simulators/raw', [
                 'initial_amount' => 1000,
                 'days' => 720,
@@ -35,12 +35,12 @@ class SimulatorsTest extends TestCase
             ]
         );
 
-        $request->assertStatus(422);
+        $response->assertStatus(422);
     }
 
     public function testLciSuccessfullyRequest()
     {
-        $request = $this->postJson(
+        $response = $this->postJson(
             '/api/simulators/lci', [
                 'initial_amount' => 1000,
                 'days' => 360,
@@ -48,9 +48,9 @@ class SimulatorsTest extends TestCase
             ]
         );
 
-        $request->assertStatus(200);
+        $response->assertStatus(200);
 
-        $request->assertJson([
+        $response->assertJson([
             'gross_amount' => 1100,
             'discounts' => 0,
             'final_amount' => 1100,
@@ -59,19 +59,19 @@ class SimulatorsTest extends TestCase
 
     public function testLciUnprocessableEntityRequest()
     {
-        $request = $this->postJson(
+        $response = $this->postJson(
             '/api/simulators/lci', [
                 'initial_amount' => 1000,
                 'days' => 720,
             ]
         );
 
-        $request->assertStatus(422);
+        $response->assertStatus(422);
     }
 
     public function testLcaSuccessfullyRequest()
     {
-        $request = $this->postJson(
+        $response = $this->postJson(
             '/api/simulators/lca', [
                 'initial_amount' => 1000,
                 'days' => 360,
@@ -79,9 +79,9 @@ class SimulatorsTest extends TestCase
             ]
         );
 
-        $request->assertStatus(200);
+        $response->assertStatus(200);
 
-        $request->assertJson([
+        $response->assertJson([
             'gross_amount' => 1200,
             'discounts' => 0,
             'final_amount' => 1200,
@@ -90,7 +90,7 @@ class SimulatorsTest extends TestCase
 
     public function testLcaUnprocessableEntityRequest()
     {
-        $request = $this->postJson(
+        $response = $this->postJson(
             '/api/simulators/lca', [
                 'initial_amount' => 1000,
                 'days' => 720.1,
@@ -98,12 +98,12 @@ class SimulatorsTest extends TestCase
             ]
         );
 
-        $request->assertStatus(422);
+        $response->assertStatus(422);
     }
 
     public function testCdbSuccessfullyRequest()
     {
-        $request = $this->postJson(
+        $response = $this->postJson(
             '/api/simulators/cdb', [
                 'initial_amount' => 1000,
                 'days' => 360,
@@ -111,9 +111,9 @@ class SimulatorsTest extends TestCase
             ]
         );
 
-        $request->assertStatus(200);
+        $response->assertStatus(200);
 
-        $request->assertJson([
+        $response->assertJson([
             'gross_amount' => 1100,
             'discounts' => 17.5,
             'final_amount' => 1082.5,
@@ -122,7 +122,7 @@ class SimulatorsTest extends TestCase
 
     public function testCdbUnprocessableEntityRequest()
     {
-        $request = $this->postJson(
+        $response = $this->postJson(
             '/api/simulators/cdb', [
                 'initial_amount' => 'not a number',
                 'days' => 720,
@@ -130,12 +130,12 @@ class SimulatorsTest extends TestCase
             ]
         );
 
-        $request->assertStatus(422);
+        $response->assertStatus(422);
     }
 
     public function testLcSuccessfullyRequest()
     {
-        $request = $this->postJson(
+        $response = $this->postJson(
             '/api/simulators/lc', [
                 'initial_amount' => 1000,
                 'days' => 360,
@@ -143,9 +143,9 @@ class SimulatorsTest extends TestCase
             ]
         );
 
-        $request->assertStatus(200);
+        $response->assertStatus(200);
 
-        $request->assertJson([
+        $response->assertJson([
             'gross_amount' => 1150,
             'discounts' => 26.25,
             'final_amount' => 1123.75,
@@ -154,14 +154,14 @@ class SimulatorsTest extends TestCase
 
     public function testLcUnprocessableEntityRequest()
     {
-        $request = $this->postJson(
+        $response = $this->postJson(
             '/api/simulators/lc', [
                 'days' => 720,
                 'annual_interest' => 0.15
             ]
         );
 
-        $request->assertStatus(422);
+        $response->assertStatus(422);
     }
 
 }

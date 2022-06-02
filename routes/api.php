@@ -27,3 +27,14 @@ Route::prefix('simulators')
         Route::post('cdb', 'Simulators@cdb');
         Route::post('lc', 'Simulators@lc');
     });
+
+Route::prefix('selic-histories')
+    ->namespace('\App\Http\Controllers')
+    ->middleware(['auth:sanctum'])
+    ->group(function() {
+        Route::get('/', 'SelicHistories@index');
+        Route::get('/{selicHistory}', 'SelicHistories@update');
+        Route::post('/', 'SelicHistories@store');
+        Route::put('/{selicHistory}', 'SelicHistories@update');
+        Route::delete('/{selicHistory}', 'SelicHistories@destroy');
+    });

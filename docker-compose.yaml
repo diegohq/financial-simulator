@@ -33,7 +33,7 @@ services:
     volumes:
       - ./:/var/www/html
     depends_on:
-      - postgres
+      - sqlite
   composer:
     build:
       context: ./
@@ -44,9 +44,13 @@ services:
       - ./docker/dev/volumes/composer:/tmp
   postgres:
     image: 'postgres:14.3-alpine'
+    ports:
+      - '5432:5432'
     environment:
       POSTGRES_DB: simulator
       POSTGRES_USER: user
       POSTGRES_PASSWORD: secret
     volumes:
       - ./docker/dev/volumes/postgres:/var/lib/postgresql/data
+  sqlite:
+    image: 'keinos/sqlite3:3.38.5'
