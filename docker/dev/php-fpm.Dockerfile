@@ -9,6 +9,9 @@ RUN apt-get update
 RUN apt-get install -y zip unzip libzip-dev
 RUN docker-php-ext-install zip
 
+# Install Postgres
+RUN apt-get install -y libpq-dev && docker-php-ext-install pdo pdo_pgsql
+
 COPY . .
 
 RUN addgroup --gid 1000 laravel
