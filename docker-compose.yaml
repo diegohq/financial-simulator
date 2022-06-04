@@ -12,7 +12,7 @@ services:
   php-fpm:
     build:
       context: ./
-      dockerfile: docker/dev/php-fpm.Dockerfile
+      dockerfile: docker/php-fpm.Dockerfile
     volumes:
       - ./:/var/www/html
     depends_on:
@@ -20,15 +20,16 @@ services:
   php:
     build:
       context: ./
-      dockerfile: docker/dev/php.Dockerfile
+      dockerfile: docker/php-fpm.Dockerfile
     volumes:
       - ./:/var/www/html
+    entrypoint: [ "php" ]
     depends_on:
       - postgres
   phpunit:
     build:
       context: ./
-      dockerfile: docker/dev/php.Dockerfile
+      dockerfile: docker/php-fpm.Dockerfile
     entrypoint: [ "vendor/bin/phpunit" ]
     volumes:
       - ./:/var/www/html
@@ -37,7 +38,7 @@ services:
   composer:
     build:
       context: ./
-      dockerfile: docker/dev/php.Dockerfile
+      dockerfile: docker/php-fpm.Dockerfile
     entrypoint: ["composer"]
     volumes:
       - ./:/var/www/html
