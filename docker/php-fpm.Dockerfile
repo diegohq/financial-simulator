@@ -5,6 +5,9 @@ WORKDIR /var/www/html
 # Update system
 RUN apt-get update
 
+# Install Composer
+COPY --from=composer /usr/bin/composer /usr/bin/composer
+
 # Install zip
 RUN apt-get install -y zip unzip libzip-dev
 RUN docker-php-ext-install zip
