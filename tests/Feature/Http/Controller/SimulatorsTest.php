@@ -10,13 +10,14 @@ class SimulatorsTest extends TestCase
 {
     use DatabaseMigrations;
 
-    public function testRawSuccessfullyRequestInformingAnnualInterest()
+    public function testRawSuccessfullyRequestUsingRawBaseTax()
     {
         $response = $this->postJson(
             '/api/simulators/raw', [
                 'initial_amount' => 1000,
                 'days' => 720,
-                'annual_interest' => 0.1
+                'annual_interest' => 0.1,
+                'base_tax' => 'raw'
             ]
         );
 
@@ -37,6 +38,8 @@ class SimulatorsTest extends TestCase
             '/api/simulators/raw', [
                 'initial_amount' => 1000,
                 'days' => 720,
+                'annual_interest' => 1,
+                'base_tax' => 'selic'
             ]
         );
 
@@ -62,13 +65,14 @@ class SimulatorsTest extends TestCase
         $response->assertStatus(422);
     }
 
-    public function testLciSuccessfullyRequestInformingAnnualInterest()
+    public function testLciSuccessfullyRequestUsingRawBaseTax()
     {
         $response = $this->postJson(
             '/api/simulators/lci', [
                 'initial_amount' => 1000,
                 'days' => 360,
-                'annual_interest' => 0.1
+                'annual_interest' => 0.1,
+                'base_tax' => 'raw'
             ]
         );
 
@@ -81,14 +85,16 @@ class SimulatorsTest extends TestCase
         ]);
     }
 
-    public function testLciSuccessfullyRequestUsingSelic()
+    public function testLciSuccessfullyRequestUsingCdi()
     {
-        SelicHistory::factory()->create(['value' => 0.1]);
+        SelicHistory::factory()->create(['value' => 0.101]);
 
         $response = $this->postJson(
             '/api/simulators/lci', [
                 'initial_amount' => 1000,
                 'days' => 360,
+                'annual_interest' => 1,
+                'base_tax' => 'cdi'
             ]
         );
 
@@ -106,20 +112,22 @@ class SimulatorsTest extends TestCase
         $response = $this->postJson(
             '/api/simulators/lci', [
                 'initial_amount' => 1000,
-                'annual_interest' => 0.1
+                'days' => 360,
+                'base_tax' => 'raw'
             ]
         );
 
         $response->assertStatus(422);
     }
 
-    public function testLcaSuccessfullyRequestInformingAnnualInterest()
+    public function testLcaSuccessfullyRequestUsingRawBaseTax()
     {
         $response = $this->postJson(
             '/api/simulators/lca', [
                 'initial_amount' => 1000,
                 'days' => 360,
-                'annual_interest' => 0.2
+                'annual_interest' => 0.2,
+                'base_tax' => 'raw'
             ]
         );
 
@@ -140,15 +148,17 @@ class SimulatorsTest extends TestCase
             '/api/simulators/lca', [
                 'initial_amount' => 1000,
                 'days' => 360,
+                'annual_interest' => 0.9,
+                'base_tax' => 'selic'
             ]
         );
 
         $response->assertStatus(200);
 
         $response->assertJson([
-            'gross_amount' => 1200,
+            'gross_amount' => 1180,
             'discounts' => 0,
-            'final_amount' => 1200,
+            'final_amount' => 1180,
         ]);
     }
 
@@ -157,21 +167,23 @@ class SimulatorsTest extends TestCase
         $response = $this->postJson(
             '/api/simulators/lca', [
                 'initial_amount' => 1000,
-                'days' => 720.1,
-                'annual_interest' => 0.15
+                'days' => 720,
+                'annual_interest' => 0.15,
+                'base_tax' => 'foo'
             ]
         );
 
         $response->assertStatus(422);
     }
 
-    public function testCdbSuccessfullyRequestInformingAnnualInterest()
+    public function testCdbSuccessfullyRequestUsingRawBaseTax()
     {
         $response = $this->postJson(
             '/api/simulators/cdb', [
                 'initial_amount' => 1000,
                 'days' => 360,
-                'annual_interest' => 0.1
+                'annual_interest' => 0.1,
+                'base_tax' => 'raw'
             ]
         );
 
@@ -184,23 +196,25 @@ class SimulatorsTest extends TestCase
         ]);
     }
 
-    public function testCdbSuccessfullyRequestUsingSelic()
+    public function testCdbSuccessfullyRequestUsingCdi()
     {
-        SelicHistory::factory()->create(['value' => 0.1]);
+        SelicHistory::factory()->create(['value' => 0.101]);
 
         $response = $this->postJson(
             '/api/simulators/cdb', [
                 'initial_amount' => 1000,
                 'days' => 360,
+                'annual_interest' => 1.1,
+                'base_tax' => 'cdi'
             ]
         );
 
         $response->assertStatus(200);
 
         $response->assertJson([
-            'gross_amount' => 1100,
-            'discounts' => 17.5,
-            'final_amount' => 1082.5,
+            'gross_amount' => 1110,
+            'discounts' => 19.25,
+            'final_amount' => 1090.75,
         ]);
     }
 
@@ -210,20 +224,22 @@ class SimulatorsTest extends TestCase
             '/api/simulators/cdb', [
                 'initial_amount' => 'not a number',
                 'days' => 720,
-                'annual_interest' => 0.15
+                'annual_interest' => 0.15,
+                'base_tax' => 'raw'
             ]
         );
 
         $response->assertStatus(422);
     }
 
-    public function testLcSuccessfullyRequestInformingAnnualInterest()
+    public function testLcSuccessfullyRequestUsingRawBaseTax()
     {
         $response = $this->postJson(
             '/api/simulators/lc', [
                 'initial_amount' => 1000,
                 'days' => 360,
-                'annual_interest' => 0.15
+                'annual_interest' => 0.15,
+                'base_tax' => 'raw'
             ]
         );
 
@@ -244,6 +260,8 @@ class SimulatorsTest extends TestCase
             '/api/simulators/lc', [
                 'initial_amount' => 1000,
                 'days' => 360,
+                'annual_interest' => 1,
+                'base_tax' => 'selic'
             ]
         );
 

@@ -3,24 +3,45 @@
 namespace App\Services\Applications;
 
 use App\Models\SelicHistory;
+use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 
 class AnnualInterest
 {
     /**
-     * If not informed, SELIC will be used
+     * Return the annual interest processed
      *
-     * @param float|null $annualInterest
+     * @param float $annualInterest
+     * @param string $baseTax
      * @return float
      */
-    public function interest(?float $annualInterest = null): float
+    public function interest(
+        float $annualInterest,
+        string $baseTax
+    ): float {
+        return $annualInterest * $this->baseTax($baseTax);
+    }
+
+    private function baseTax(string $baseTax)
     {
-        if($annualInterest) {
-            return $annualInterest;
+        if($baseTax == "raw") {
+            return 1;
         }
 
-        return SelicHistory::query()
+        $selic = SelicHistory::query()
             ->latest('announced_at')
             ->firstOrFail()
             ->value;
+
+        if($baseTax == "selic") {
+            return $selic;
+        }
+
+        if($baseTax == "cdi") {
+            return $selic - 0.001;
+        }
+
+        throw new UnprocessableEntityHttpException(
+            $baseTax ." does not exist"
+        );
     }
 }

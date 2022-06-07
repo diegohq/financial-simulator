@@ -32,7 +32,8 @@ class Simulators extends Controller
                 $request->input('initial_amount'),
                 $request->input('days'),
                 $this->annualInterest->interest(
-                    $request->input('annual_interest')
+                    $request->input('annual_interest'),
+                    $request->input('base_tax'),
                 ),
             )
         );
@@ -52,7 +53,8 @@ class Simulators extends Controller
                 $request->input('initial_amount'),
                 $request->input('days'),
                 $this->annualInterest->interest(
-                    $request->input('annual_interest')
+                    $request->input('annual_interest'),
+                    $request->input('base_tax'),
                 ),
             )
         );
@@ -72,7 +74,8 @@ class Simulators extends Controller
                 $request->input('initial_amount'),
                 $request->input('days'),
                 $this->annualInterest->interest(
-                    $request->input('annual_interest')
+                    $request->input('annual_interest'),
+                    $request->input('base_tax'),
                 ),
             )
         );
@@ -92,7 +95,8 @@ class Simulators extends Controller
                 $request->input('initial_amount'),
                 $request->input('days'),
                 $this->annualInterest->interest(
-                    $request->input('annual_interest')
+                    $request->input('annual_interest'),
+                    $request->input('base_tax'),
                 ),
             )
         );
@@ -112,7 +116,8 @@ class Simulators extends Controller
                 $request->input('initial_amount'),
                 $request->input('days'),
                 $this->annualInterest->interest(
-                    $request->input('annual_interest')
+                    $request->input('annual_interest'),
+                    $request->input('base_tax'),
                 ),
             )
         );

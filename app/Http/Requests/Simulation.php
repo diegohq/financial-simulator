@@ -26,7 +26,8 @@ class Simulation extends FormRequest
         return [
             'initial_amount' => 'required|numeric',
             'days' => 'required|integer',
-            'annual_interest' => 'numeric',
+            'annual_interest' => 'required|numeric',
+            'base_tax' => 'required|in:selic,cdi,raw',
         ];
     }
 }
