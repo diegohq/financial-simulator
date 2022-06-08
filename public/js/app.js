@@ -5462,46 +5462,43 @@ var Simulation = /*#__PURE__*/function (_React$Component) {
 
   var _super = _createSuper(Simulation);
 
-  function Simulation(props) {
+  function Simulation() {
     _classCallCheck(this, Simulation);
 
-    return _super.call(this, props); // this.state = {
-    //     simulation: props.simulation
-    // }
+    return _super.apply(this, arguments);
   }
 
   _createClass(Simulation, [{
+    key: "formatPrice",
+    value: function formatPrice(value) {
+      var val = (value / 1).toFixed(2).replace('.', ',');
+      return 'R$ ' + val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    }
+  }, {
     key: "render",
     value: function render() {
-      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("div", {
-        className: "card-body",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("div", {
-          className: "form-group row",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("label", {
-            className: "col-sm-4 col-form-label",
-            children: "Valor bruto"
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
-            className: "col-sm-8",
-            children: this.props.simulation.gross_amount
-          })]
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("div", {
-          className: "form-group row",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("label", {
-            className: "col-sm-4 col-form-label",
-            children: "Descontos"
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
-            className: "col-sm-8",
-            children: this.props.simulation.discounts
-          })]
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("div", {
-          className: "form-group row",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("label", {
-            className: "col-sm-4 col-form-label",
-            children: "Valor l\xEDquido"
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
-            className: "col-sm-8",
-            children: this.props.simulation.final_amount
-          })]
+      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("ul", {
+        className: "list-group",
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("li", {
+          className: "list-group-item",
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("strong", {
+            children: "Valor inicial: "
+          }), this.formatPrice(this.props.data.initial_amount)]
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("li", {
+          className: "list-group-item",
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("strong", {
+            children: "Valor bruto: "
+          }), this.formatPrice(this.props.simulation.gross_amount)]
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("li", {
+          className: "list-group-item",
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("strong", {
+            children: "Descontos: "
+          }), this.formatPrice(this.props.simulation.discounts)]
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("li", {
+          className: "list-group-item list-group-item-action active",
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("strong", {
+            children: "Valor l\xEDquido: "
+          }), this.formatPrice(this.props.simulation.final_amount)]
         })]
       });
     }
@@ -5574,13 +5571,17 @@ var Simulator = /*#__PURE__*/function (_React$Component) {
 
     _this = _super.call(this, props);
     _this.state = {
-      application: 'raw',
+      application: 'cdb',
       initialAmount: 0,
       time: 0,
       timeType: 'years',
       annualInterest: 100,
-      baseTax: 'selic',
-      simulation: null
+      baseTax: 'cdi',
+      simulation: null,
+      formatedData: null,
+      submitDisabled: false,
+      submitText: "Simular",
+      error: null
     };
     _this.days = _this.days.bind(_assertThisInitialized(_this));
     _this.handleApplication = _this.handleApplication.bind(_assertThisInitialized(_this));
@@ -5634,12 +5635,41 @@ var Simulator = /*#__PURE__*/function (_React$Component) {
       var _this2 = this;
 
       event.preventDefault();
-      axios__WEBPACK_IMPORTED_MODULE_3___default().post("/api/simulators/".concat(this.state.application), {
+
+      if (this.state.initialAmount == undefined || this.state.initialAmount <= 0 || typeof this.state.initialAmount == 'numeric') {
+        this.setState({
+          error: "Valor inicial é obrigatório e deve ser um número maior que zero"
+        });
+        return;
+      }
+
+      if (this.state.time == undefined || this.state.time == 0 || typeof this.state.time == 'numeric') {
+        this.setState({
+          error: "Prazo é obrigatório e deve ser um número maior que zero"
+        });
+        return;
+      }
+
+      if (this.state.annualInterest == undefined || this.state.annualInterest == 0 || typeof this.state.annualInterest == 'numeric') {
+        this.setState({
+          error: "Taxa é obrigatória e deve ser um número maior que zero"
+        });
+        return;
+      }
+
+      this.setState({
+        error: null,
+        submitDisabled: true,
+        submitText: "Simulando"
+      }); // No need to call setState here...
+
+      this.state.formatedData = {
         'initial_amount': this.state.initialAmount,
         'days': this.days(),
         'annual_interest': this.state.annualInterest / 100,
         'base_tax': this.state.baseTax
-      }).then(function (response) {
+      };
+      axios__WEBPACK_IMPORTED_MODULE_3___default().post("/api/simulators/".concat(this.state.application), this.state.formatedData).then(function (response) {
         _this2.setState({
           simulation: response.data
         });
@@ -5649,13 +5679,17 @@ var Simulator = /*#__PURE__*/function (_React$Component) {
     key: "reset",
     value: function reset() {
       this.setState({
-        application: 'raw',
+        application: 'cdb',
         initialAmount: 0,
         time: 0,
         timeType: 'years',
         annualInterest: 100,
-        baseTax: 'selic',
-        simulation: null
+        baseTax: 'cdi',
+        simulation: null,
+        formatedData: null,
+        submitDisabled: false,
+        submitText: "Simular",
+        error: null
       });
     }
   }, {
@@ -5663,13 +5697,17 @@ var Simulator = /*#__PURE__*/function (_React$Component) {
     value: function render() {
       var _this3 = this;
 
-      return this.state.simulation !== null ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
+      return this.state.simulation !== null && this.state.formatedData !== null ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
         children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_Simulation__WEBPACK_IMPORTED_MODULE_4__["default"], {
-          simulation: this.state.simulation
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("button", {
-          onClick: this.reset,
-          className: "btn btn-primary",
-          children: "Informar valores diferentes"
+          simulation: this.state.simulation,
+          data: this.state.formatedData
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
+          className: "row mt-3",
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("button", {
+            onClick: this.reset,
+            className: "btn btn-primary btn-block",
+            children: "Fazer nova simula\xE7\xE3o"
+          })
         })]
       }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("form", {
         onSubmit: this.handleSubmit,
@@ -5704,7 +5742,7 @@ var Simulator = /*#__PURE__*/function (_React$Component) {
             })
           })]
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
-          className: "form-group row",
+          className: "form-group row mt-2",
           children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("label", {
             htmlFor: "initial_amount",
             className: "col-sm-3 col-form-label",
@@ -5712,6 +5750,7 @@ var Simulator = /*#__PURE__*/function (_React$Component) {
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
             className: "col-sm-9",
             children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(react_currency_input_field__WEBPACK_IMPORTED_MODULE_2__["default"], {
+              className: "form-control",
               id: "initialAmount",
               name: "initialAmount",
               prefix: "R$ ",
@@ -5723,7 +5762,7 @@ var Simulator = /*#__PURE__*/function (_React$Component) {
             })
           })]
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
-          className: "form-group row",
+          className: "form-group row mt-2",
           children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("label", {
             htmlFor: "time",
             className: "col-sm-3 col-form-label",
@@ -5731,6 +5770,7 @@ var Simulator = /*#__PURE__*/function (_React$Component) {
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
             className: "col-sm-6",
             children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(react_currency_input_field__WEBPACK_IMPORTED_MODULE_2__["default"], {
+              className: "form-control",
               id: "time",
               name: "time",
               allowDecimals: false,
@@ -5758,7 +5798,7 @@ var Simulator = /*#__PURE__*/function (_React$Component) {
             })
           })]
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
-          className: "form-group row",
+          className: "form-group row mt-2",
           children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("label", {
             htmlFor: "tax",
             className: "col-sm-3 col-form-label",
@@ -5766,6 +5806,7 @@ var Simulator = /*#__PURE__*/function (_React$Component) {
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
             className: "col-sm-6",
             children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(react_currency_input_field__WEBPACK_IMPORTED_MODULE_2__["default"], {
+              className: "form-control",
               id: "annualInterest",
               name: "annualInterest",
               suffix: "%",
@@ -5794,10 +5835,18 @@ var Simulator = /*#__PURE__*/function (_React$Component) {
               })]
             })
           })]
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("button", {
-          type: "submit",
-          className: "btn btn-primary",
-          children: "Simular"
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
+          className: "row text-danger mt-3 mb-2",
+          role: "alert",
+          children: this.state.error
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
+          className: "form-group row mt-2",
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("button", {
+            type: "submit",
+            disabled: this.state.submitDisabled,
+            className: "btn btn-primary",
+            children: this.state.submitText
+          })
         })]
       });
     }

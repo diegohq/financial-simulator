@@ -2,40 +2,32 @@ import React from "react";
 
 export default class Simulation extends React.Component {
 
-    constructor(props) {
-        super(props);
-
-        // this.state = {
-        //     simulation: props.simulation
-        // }
+    formatPrice(value) {
+        let val = (value/1).toFixed(2).replace('.', ',')
+        return 'R$ ' + val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")
     }
 
     render() {
         return (
-            <div className="card-body">
 
-                <div className="form-group row">
-                    <label className="col-sm-4 col-form-label">Valor
-                        bruto</label>
-                    <div className="col-sm-8">
-                        {this.props.simulation.gross_amount}
-                    </div>
-                </div>
-
-                <div className="form-group row">
-                    <label className="col-sm-4 col-form-label">Descontos</label>
-                    <div className="col-sm-8">
-                        {this.props.simulation.discounts}
-                    </div>
-                </div>
-
-                <div className="form-group row">
-                    <label className="col-sm-4 col-form-label">Valor líquido</label>
-                    <div className="col-sm-8">
-                        {this.props.simulation.final_amount}
-                    </div>
-                </div>
-            </div>
+            <ul className="list-group">
+                <li className="list-group-item">
+                    <strong>Valor inicial: </strong>
+                    {this.formatPrice(this.props.data.initial_amount)}
+                </li>
+                <li className="list-group-item">
+                    <strong>Valor bruto: </strong>
+                    {this.formatPrice(this.props.simulation.gross_amount)}
+                </li>
+                <li className="list-group-item">
+                    <strong>Descontos: </strong>
+                    {this.formatPrice(this.props.simulation.discounts)}
+                </li>
+                <li className="list-group-item list-group-item-action active">
+                    <strong>Valor líquido: </strong>
+                    {this.formatPrice(this.props.simulation.final_amount)}
+                </li>
+            </ul>
         );
     }
 

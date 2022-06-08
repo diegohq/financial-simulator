@@ -9,13 +9,17 @@ export default class Simulator extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            application: 'raw',
+            application: 'cdb',
             initialAmount: 0,
             time: 0,
             timeType: 'years',
             annualInterest: 100,
-            baseTax: 'selic',
+            baseTax: 'cdi',
             simulation: null,
+            formatedData: null,
+            submitDisabled: false,
+            submitText: "Simular",
+            error: null
         }
 
         this.days = this.days.bind(this);
@@ -55,41 +59,75 @@ export default class Simulator extends React.Component {
     handleSubmit(event) {
         event.preventDefault();
 
+        if(this.state.initialAmount == undefined || this.state.initialAmount <= 0 || typeof this.state.initialAmount == 'numeric') {
+            this.setState({
+                error: "Valor inicial é obrigatório e deve ser um número maior que zero"
+            });
+            return;
+        }
+
+        if(this.state.time == undefined || this.state.time == 0 || typeof this.state.time == 'numeric') {
+            this.setState({
+                error: "Prazo é obrigatório e deve ser um número maior que zero"
+            });
+            return;
+        }
+
+        if(this.state.annualInterest == undefined || this.state.annualInterest == 0 || typeof this.state.annualInterest == 'numeric') {
+            this.setState({
+                error: "Taxa é obrigatória e deve ser um número maior que zero"
+            });
+            return;
+        }
+
+        this.setState({
+            error: null,
+            submitDisabled: true,
+            submitText: "Simulando"
+        });
+
+        // No need to call setState here...
+        this.state.formatedData = {
+            'initial_amount': this.state.initialAmount,
+            'days': this.days(),
+            'annual_interest': this.state.annualInterest / 100,
+            'base_tax': this.state.baseTax
+        };
+
         axios.post(
             `/api/simulators/${this.state.application}`,
-            {
-                'initial_amount': this.state.initialAmount,
-                'days': this.days(),
-                'annual_interest': this.state.annualInterest / 100,
-                'base_tax': this.state.baseTax
-            }
+            this.state.formatedData
         ).then((response) => {
             this.setState({
-                simulation: response.data
+                simulation: response.data,
             });
         })
 
     }
 
     reset() {
-
         this.setState({
-            application: 'raw',
+            application: 'cdb',
             initialAmount: 0,
             time: 0,
             timeType: 'years',
             annualInterest: 100,
-            baseTax: 'selic',
+            baseTax: 'cdi',
             simulation: null,
-        })
-
+            formatedData: null,
+            submitDisabled: false,
+            submitText: "Simular",
+            error: null
+        });
     }
 
     render() {
-        return this.state.simulation !== null ?
+        return this.state.simulation !== null && this.state.formatedData !== null ?
             ( <div>
-                <Simulation simulation={this.state.simulation} />
-                <button onClick={this.reset} className="btn btn-primary">Informar valores diferentes</button>
+                <Simulation simulation={this.state.simulation} data={this.state.formatedData} />
+                <div className="row mt-3">
+                    <button onClick={this.reset} className="btn btn-primary btn-block">Fazer nova simulação</button>
+                </div>
             </div> )
             : (
             <form onSubmit={this.handleSubmit}>
@@ -108,12 +146,13 @@ export default class Simulator extends React.Component {
                     </div>
                 </div>
 
-                <div className="form-group row">
+                <div className="form-group row mt-2">
                     <label htmlFor="initial_amount"
                            className="col-sm-3 col-form-label">Valor
                         inicial*</label>
                     <div className="col-sm-9">
                         <CurrencyInput
+                            className="form-control"
                             id="initialAmount"
                             name="initialAmount"
                             prefix={"R$ "}
@@ -123,11 +162,12 @@ export default class Simulator extends React.Component {
                         />
                     </div>
                 </div>
-                <div className="form-group row">
+                <div className="form-group row mt-2">
                     <label htmlFor="time"
                            className="col-sm-3 col-form-label">Prazo*</label>
                     <div className="col-sm-6">
                         <CurrencyInput
+                            className="form-control"
                             id="time"
                             name="time"
                             allowDecimals={false}
@@ -143,11 +183,12 @@ export default class Simulator extends React.Component {
                         </select>
                     </div>
                 </div>
-                <div className="form-group row">
+                <div className="form-group row mt-2">
                     <label htmlFor="tax"
                            className="col-sm-3 col-form-label">Taxa*</label>
                     <div className="col-sm-6">
                         <CurrencyInput
+                            className="form-control"
                             id="annualInterest"
                             name="annualInterest"
                             suffix={"%"}
@@ -166,10 +207,18 @@ export default class Simulator extends React.Component {
                     </div>
                 </div>
 
-                <button type="submit" className="btn btn-primary">Simular</button>
+                <div className="row text-danger mt-3 mb-2" role="alert">
+                    {this.state.error}
+                </div>
+
+                <div className="form-group row mt-2">
+                    <button type="submit" disabled={this.state.submitDisabled} className="btn btn-primary">
+                        {this.state.submitText}
+                    </button>
+                </div>
 
             </form>
-        );
+        )
     }
 }
 
