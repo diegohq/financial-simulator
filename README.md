@@ -6,6 +6,8 @@ This project has been made with educational purposes.
 
 The main idea here was to build a project using Laravel and React.
 
+You can check this tool online (in portuguese) at https://www.simuladoresdeinvestimento.com.br/
+
 ## Usage
 
 To run the project, you can use Docker:
