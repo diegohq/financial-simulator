@@ -107,12 +107,12 @@ export default class Simulator extends React.Component {
 
     reset() {
         this.setState({
-            application: 'cdb',
-            initialAmount: 0,
-            time: 0,
-            timeType: 'years',
-            annualInterest: 100,
-            baseTax: 'cdi',
+            // application: 'cdb',
+            // initialAmount: 0,
+            // time: 0,
+            // timeType: 'years',
+            // annualInterest: 100,
+            // baseTax: 'cdi',
             simulation: null,
             formatedData: null,
             submitDisabled: false,

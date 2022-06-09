@@ -9,6 +9,18 @@
     <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet" />
     <script src="{{ asset('js/app.js') }}" defer></script>
 
+    @if(App::environment('production'))
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-85ZMZMW04P"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'G-85ZMZMW04P');
+    </script>
+    @endif
+
 </head>
 <body>
 
