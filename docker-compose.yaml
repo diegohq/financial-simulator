@@ -9,41 +9,52 @@ services:
       - ./docker/dev/nginx/nginx.conf:/etc/nginx/conf.d/default.conf
     depends_on:
       - php-fpm
-  php-fpm:
-    build:
-      context: ./
-      dockerfile: docker/php-fpm.Dockerfile
-    volumes:
-      - ./:/var/www/html
-    depends_on:
-      - postgres
   php:
     build:
       context: ./
-      dockerfile: docker/php-fpm.Dockerfile
+      dockerfile: docker/php.Dockerfile
     volumes:
       - ./:/var/www/html
     entrypoint: [ "php" ]
     depends_on:
       - postgres
+      - npm
+  php-fpm:
+    build:
+      context: ./
+      dockerfile: docker/php.Dockerfile
+      args:
+        PORT: 9001
+    volumes:
+      - ./:/var/www/html
+    depends_on:
+      - postgres
+      - npm
+  php-fpm-prod:
+    build:
+      context: ./
+      dockerfile: docker/php.Dockerfile
+      args:
+        PORT: 9001
+    depends_on:
+      - postgres
+      - npm-prod
   phpunit:
     build:
       context: ./
-      dockerfile: docker/php-fpm.Dockerfile
+      dockerfile: docker/php.Dockerfile
     entrypoint: [ "vendor/bin/phpunit" ]
     volumes:
       - ./:/var/www/html
     depends_on:
       - sqlite
   composer:
-    #build:
-    #  context: ./
-    #  dockerfile: docker/php-fpm.Dockerfile
-    #entrypoint: ["composer"]
-    image: 'composer'
+    build:
+      context: ./
+      dockerfile: docker/php.Dockerfile
+    entrypoint: [ "composer" ]
     volumes:
-      #- ./:/var/www/html
-      - ./:/app
+      - ./:/var/www/html
       - ./docker/dev/volumes/composer:/tmp
   postgres:
     image: 'postgres:14.3-alpine'
@@ -61,6 +72,9 @@ services:
     build:
       context: ./
       dockerfile: docker/node.Dockerfile
-    entrypoint: [ "npm" ]
     volumes:
       - ./:/var/www/html
+  npm-prod:
+    build:
+      context: ./
+      dockerfile: docker/node.Dockerfile
