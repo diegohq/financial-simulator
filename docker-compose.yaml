@@ -5,7 +5,7 @@ services:
     ports:
       - '8000:80'
     volumes:
-      - ./:/var/www/html
+      - ./:/code/financial-simulator
       - ./docker/dev/nginx/nginx.conf:/etc/nginx/conf.d/default.conf
     depends_on:
       - php-fpm
@@ -14,7 +14,7 @@ services:
       context: ./
       dockerfile: docker/php.Dockerfile
     volumes:
-      - ./:/var/www/html
+      - ./:/code/financial-simulator
     entrypoint: [ "php" ]
     depends_on:
       - postgres
@@ -23,29 +23,20 @@ services:
     build:
       context: ./
       dockerfile: docker/php.Dockerfile
-      args:
-        PORT: 9001
+    ports:
+      - '9001:9000'
     volumes:
-      - ./:/var/www/html
+      - ./:/code/financial-simulator
     depends_on:
       - postgres
       - npm
-  php-fpm-prod:
-    build:
-      context: ./
-      dockerfile: docker/php.Dockerfile
-      args:
-        PORT: 9001
-    depends_on:
-      - postgres
-      - npm-prod
   phpunit:
     build:
       context: ./
       dockerfile: docker/php.Dockerfile
     entrypoint: [ "vendor/bin/phpunit" ]
     volumes:
-      - ./:/var/www/html
+      - ./:/code/financial-simulator
     depends_on:
       - sqlite
   composer:
@@ -54,8 +45,8 @@ services:
       dockerfile: docker/php.Dockerfile
     entrypoint: [ "composer" ]
     volumes:
-      - ./:/var/www/html
-      - ./docker/dev/volumes/composer:/tmp
+      - ./:/code/financial-simulator
+      - ./docker/volumes/composer:/tmp
   postgres:
     image: 'postgres:14.3-alpine'
     ports:
@@ -65,7 +56,7 @@ services:
       POSTGRES_USER: user
       POSTGRES_PASSWORD: secret
     volumes:
-      - ./docker/dev/volumes/postgres:/var/lib/postgresql/data
+      - ./docker/volumes/postgres:/var/lib/postgresql/data
   sqlite:
     image: 'keinos/sqlite3:3.38.5'
   npm:
@@ -73,8 +64,4 @@ services:
       context: ./
       dockerfile: docker/node.Dockerfile
     volumes:
-      - ./:/var/www/html
-  npm-prod:
-    build:
-      context: ./
-      dockerfile: docker/node.Dockerfile
+      - ./:/code/financial-simulator

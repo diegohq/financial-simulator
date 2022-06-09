@@ -1,10 +1,6 @@
 FROM php:8.1-fpm
 
-ARG PORT=9000
-
-RUN sed -i "s/9000/$PORT/" /usr/local/etc/php-fpm.d/zz-docker.conf
-
-WORKDIR /var/www/html
+WORKDIR /code/financial-simulator
 
 # Update system
 RUN apt-get -y update
@@ -21,11 +17,7 @@ RUN apt-get install -y libpq-dev && docker-php-ext-install pdo pdo_pgsql
 
 COPY . .
 
-RUN composer install
-
 RUN addgroup --gid 1000 laravel
 RUN adduser --ingroup laravel --shell /bin/sh laravel
 
 USER laravel
-
-EXPOSE $PORT
