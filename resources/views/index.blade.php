@@ -25,7 +25,7 @@
     @endif
 
 </head>
-<body>
+<body class="bg-light">
 
     <div class="container">
         <div class="row mt-3">
