@@ -30,91 +30,20 @@
     <div class="container">
         <div class="row mt-3">
 
-            <div class="col-md-3">
-                @if(App::environment(['production']))
-                <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5507757504814188"
-                        crossorigin="anonymous"></script>
-                <!-- Laterais -->
-                <ins class="adsbygoogle"
-                     style="display:block"
-                     data-ad-client="ca-pub-5507757504814188"
-                     data-ad-slot="8971283441"
-                     data-ad-format="auto"
-                     data-full-width-responsive="true"></ins>
-                <script>
-                    (adsbygoogle = window.adsbygoogle || []).push({});
-                </script>
-                @endif
-            </div>
+            <div class="col-md-3"></div>
             <div class="col-md-6 col-12">
                 <h1 class="mb-3">Simuladores de investimento</h1>
                 <div id="simulator"></div>
             </div>
-            <div class="col-md-3">
-                @if(App::environment(['production']))
-                <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5507757504814188"
-                        crossorigin="anonymous"></script>
-                <!-- Laterais -->
-                <ins class="adsbygoogle"
-                     style="display:block"
-                     data-ad-client="ca-pub-5507757504814188"
-                     data-ad-slot="8971283441"
-                     data-ad-format="auto"
-                     data-full-width-responsive="true"></ins>
-                <script>
-                    (adsbygoogle = window.adsbygoogle || []).push({});
-                </script>
-                @endif
-            </div>
+            <div class="col-md-3"></div>
 
         </div>
 
         <div class="row mt-3">
 
-            <div class="col-12">
+            <div class="col-md-3"></div>
 
-                @if(App::environment(['production']))
-                <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5507757504814188"
-                        crossorigin="anonymous"></script>
-                <!-- Inferior -->
-                <ins class="adsbygoogle"
-                     style="display:block"
-                     data-ad-client="ca-pub-5507757504814188"
-                     data-ad-slot="2292262824"
-                     data-ad-format="auto"
-                     data-full-width-responsive="true"></ins>
-                <script>
-                    (adsbygoogle = window.adsbygoogle || []).push({});
-                </script>
-                @endif
-
-            </div>
-
-        </div>
-
-        <div class="row mt-3">
-
-            <div class="row mt-3">
-
-                <div class="col-md-3">
-
-                    @if(App::environment(['production']))
-                    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5507757504814188"
-                            crossorigin="anonymous"></script>
-                    <!-- Laterais -->
-                    <ins class="adsbygoogle"
-                         style="display:block"
-                         data-ad-client="ca-pub-5507757504814188"
-                         data-ad-slot="8971283441"
-                         data-ad-format="auto"
-                         data-full-width-responsive="true"></ins>
-                    <script>
-                        (adsbygoogle = window.adsbygoogle || []).push({});
-                    </script>
-                    @endif
-
-                </div>
-                <div class="col-md-6 col-12">
+            <div class="col-md-6 col-12">
                     <h2 class="mb-3">Sobre os simuladores</h2>
 
                     <p>Este simulador tem como objetivo calcular o valor esperado ao investir um valor nas aplicações disponíveis.</p>
@@ -200,24 +129,8 @@
                     <p>Por isso, faça bastante pesquisas e se planeje bem, caso esteja pensando em investir nessa modalidade de renda fixa.</p>
 
                 </div>
-                <div class="col-md-3">
-
-                    @if(App::environment(['production']))
-                    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5507757504814188"
-                            crossorigin="anonymous"></script>
-                    <!-- Laterais -->
-                    <ins class="adsbygoogle"
-                         style="display:block"
-                         data-ad-client="ca-pub-5507757504814188"
-                         data-ad-slot="8971283441"
-                         data-ad-format="auto"
-                         data-full-width-responsive="true"></ins>
-                    <script>
-                        (adsbygoogle = window.adsbygoogle || []).push({});
-                    </script>
-                    @endif
-
-                </div>
+            
+            <div class="col-md-3"></div>
 
         </div>
 
